@@ -1,0 +1,390 @@
+.page {
+    min-height: 100vh;
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+.content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.title {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* Карточка с бонусами */
+.bonusCard {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.bonusCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.bonusLabel {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.bonusAmount {
+    margin-bottom: 20px;
+}
+
+.amount {
+    font-size: 5rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    margin-right: 10px;
+}
+
+.currency {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.bonusStatus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+}
+
+.statusDot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #43e97b;
+    border-radius: 50%;
+    margin-right: 8px;
+    box-shadow: 0 0 10px #43e97b;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Секция "Куда потратить" */
+.spendSection {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.spendTitle {
+    color: white;
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    font-weight: 500;
+}
+
+.categoriesList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.categoryCard {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.categoryCard:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateX(5px);
+}
+
+.categoryIcon {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-right: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.categoryInfo {
+    flex: 1;
+}
+
+.categoryName {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.categoryDesc {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+}
+
+.spendButton {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.spendButton:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.spendButton:active {
+    transform: scale(0.95);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .page {
+        padding: 30px 15px;
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+
+    .bonusCard {
+        padding: 30px 20px;
+    }
+
+    .amount {
+        font-size: 3.5rem;
+    }
+
+    .spendTitle {
+        font-size: 1.5rem;
+    }
+
+    .categoryCard {
+        flex-wrap: wrap;
+    }
+
+    .categoryIcon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .categoryInfo {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .categoryName {
+        font-size: 1.1rem;
+    }
+
+    .spendButton {
+        width: 100%;
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 1.8rem;
+    }
+
+    .bonusCard {
+        padding: 20px 15px;
+    }
+
+    .bonusLabel {
+        font-size: 1rem;
+    }
+
+    .amount {
+        font-size: 2.5rem;
+    }
+
+    .currency {
+        font-size: 1.2rem;
+    }
+
+    .spendSection {
+        padding: 20px 15px;
+    }
+
+    .categoryCard {
+        padding: 12px 15px;
+    }
+}
+
+/* ... все существующие стили остаются ... */
+
+/* Карточка престижности */
+.prestigeCard {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 25px 30px;
+    margin-bottom: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.prestigeCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.prestigeHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.prestigeLabel {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.prestigeLevel {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.progressBar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+}
+
+/* Стили для дополнительных категорий */
+.categoryCardExtra {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 193, 7, 0.1) 100%);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    position: relative;
+}
+
+.categoryCardExtra::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.05) 0%, transparent 100%);
+    border-radius: 15px;
+    pointer-events: none;
+}
+
+.extraBadge {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 8px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #333;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+}
+
+.spendButtonExtra {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 193, 7, 0.2) 100%);
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    color: #fff7e6;
+}
+
+.spendButtonExtra:hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.4) 0%, rgba(255, 193, 7, 0.3) 100%);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .prestigeCard {
+        padding: 20px;
+    }
+
+    .prestigeLevel {
+        font-size: 1.1rem;
+    }
+
+    .extraBadge {
+        display: block;
+        margin-left: 0;
+        margin-top: 5px;
+        width: fit-content;
+    }
+}
+
+@media (max-width: 480px) {
+    .prestigeCard {
+        padding: 15px;
+    }
+
+    .prestigeLabel {
+        font-size: 0.9rem;
+    }
+
+    .prestigeLevel {
+        font-size: 1rem;
+    }
+}
