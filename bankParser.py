@@ -122,7 +122,7 @@ for task in TASKS:
 
     all_cards = driver.find_elements(By.CLASS_NAME, "iLZJOZ")
     count = min(len(all_cards), LIMIT)
-    file_path = f"parsingResults/{task['name']}.csv"
+    file_path = f"parsing_results/{task['name']}.csv"
 
     all_data_for_db = []
 
