@@ -5,6 +5,9 @@ interface UserCreationAttributes {
     password: string;
     name?: string;
     city?: string;
+    money?: number;
+    bonus?: number;
+    level?: number;
 }
 
 @Table({ tableName: 'users' })
@@ -41,4 +44,25 @@ export class User extends Model<User, UserCreationAttributes> {
         allowNull: true,
     })
     declare city: string | null;
+
+    @Column({
+        type: DataType.DECIMAL(10, 2),
+        defaultValue: 0,
+        allowNull: false,
+    })
+    declare money: number;
+
+    @Column({
+        type: DataType.DECIMAL(10, 2),
+        defaultValue: 0,
+        allowNull: false,
+    })
+    declare bonus: number;
+
+    @Column({
+        type: DataType.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+    })
+    declare level: number;
 }
