@@ -128,7 +128,7 @@ def _get_record_count():
 
 def db_connect():
     if not os.path.exists(DB_FILE):
-        raise HTTPException(503, "База не найдена, запусти load.py")
+        raise HTTPException(503, "База не найдена, запустите load.py")
     conn = sqlite3.connect(DB_FILE)
     conn.row_factory = sqlite3.Row
     return conn
