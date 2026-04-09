@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './user.model';
 import * as bcrypt from 'bcrypt';
@@ -101,6 +101,58 @@ export class UsersService {
             success: true,
             message: 'Баллы успешно начислены',
             bonus: user.bonus,
+        };
+    }
+
+    async signContract(userId: number): Promise<{ success: boolean; message: string; level?: number }> {
+        const user = await this.findById(userId);
+
+        if (!user) {
+            throw new NotFoundException('Пользователь не найден');
+        }
+
+        if (user.contract) {
+            throw new BadRequestException('Контракт уже подписан');
+        }
+
+        user.contract = true;
+        user.level = user.level + 1;
+        await user.save();
+
+        return {
+            success: true,
+            message: 'Контракт успешно подписан, уровень повышен',
+            level: user.level,
+        };
+    }
+
+    async updateLevel(userId: number, levelup: boolean): Promise<{ success: boolean; message: string; level?: number }> {
+        const user = await this.findById(userId);
+        const MAX_LEVEL = 3;
+
+        if (!user) {
+            throw new NotFoundException('Пользователь не найден');
+        }
+
+        let newLevel: number;
+
+        if (levelup) {
+            newLevel = user.level + 1;
+
+            if (newLevel > MAX_LEVEL) {
+                throw new BadRequestException(`Достигнут максимальный уровень ${MAX_LEVEL}`);
+            }
+        } else {
+            newLevel = 1;
+        }
+
+        user.level = newLevel;
+        await user.save();
+
+        return {
+            success: true,
+            message: levelup ? 'Уровень повышен' : 'Уровень сброшен до 1',
+            level: user.level,
         };
     }
 }

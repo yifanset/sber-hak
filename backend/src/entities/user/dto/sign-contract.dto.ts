@@ -1,9 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class AddMoneyDto {
+export class SignContractDto {
     @ApiProperty({ example: 1, description: 'ID пользователя' })
     userId: number;
-
-    @ApiProperty({ example: 100, description: 'Сумма для пополнения' })
-    amount: number;
 }
