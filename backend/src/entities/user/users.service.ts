@@ -2,6 +2,8 @@ import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './user.model';
 import * as bcrypt from 'bcrypt';
+import {Feedback} from "../feedback/feedback.model";
+import {Stats} from "../stats/stats.model";
 
 @Injectable()
 export class UsersService {
@@ -16,6 +18,48 @@ export class UsersService {
 
     async findById(userId: number): Promise<User | null> {
         return this.userModel.findByPk(userId);
+    }
+
+    async getUserInfo(userId: number): Promise<{ success: boolean; user?: any; message?: string }> {
+        const user = await this.userModel.findByPk(userId, {
+            attributes: { exclude: ['password'] }, // Исключаем пароль из ответа
+            include: [
+                {
+                    model: Feedback,
+                    attributes: ['id', 'question1', 'question2', 'question3', 'createdAt'],
+                    separate: true,
+                    order: [['createdAt', 'DESC']],
+                },
+                {
+                    model: Stats,
+                    attributes: ['id', 'question1', 'question2', 'question3', 'createdAt'],
+                    separate: true,
+                    order: [['createdAt', 'DESC']],
+                },
+            ],
+        });
+
+        if (!user) {
+            throw new NotFoundException('Пользователь не найден');
+        }
+
+        return {
+            success: true,
+            user: {
+                userId: user.userId,
+                login: user.login,
+                name: user.name,
+                city: user.city,
+                money: user.money,
+                bonus: user.bonus,
+                level: user.level,
+                contract: user.contract,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+                feedbacks: user.feedbacks || [],
+                stats: user.stats || [],
+            },
+        };
     }
 
     async create(userData: {

@@ -4,14 +4,15 @@ import MainPage from "./pages/main/MainPage.tsx";
 import FeedbackPage from "./pages/feedback/FeedbackPage.tsx";
 import DemoPage from "./pages/demo/DemoPage.tsx";
 import StatsPage from "./pages/stats/StatsPage.tsx";
-import DemoIndividualPage from "./pages/individual/DemoIndividualPage.tsx";
-import DemoLegalPage from "./pages/legal/DemoLegalPage.tsx";
+import DemoIndividualPage from "./pages/contract/individual/DemoIndividualPage.tsx";
+import DemoLegalPage from "./pages/contract/legal/DemoLegalPage.tsx";
 import ContractPage from "./pages/contract/ContractPage.tsx";
 import BonusPage from "./pages/bonus/BonusPage.tsx";
-import FeedbackTransferPage from "./pages/transfer/FeedbackTransferPage.tsx";
-import FeedbackIdeaPage from "./pages/idea/FeedbackIdeaPage.tsx";
-import SignUpPage from "./pages/signup/SignUpPage.tsx";
-import SignInPage from "./pages/signin/SignInPage.tsx";
+import FeedbackTransferPage from "./pages/feedback/transfer/FeedbackTransferPage.tsx";
+import FeedbackIdeaPage from "./pages/feedback/idea/FeedbackIdeaPage.tsx";
+import SignUpPage from "./pages/auth/SignUpPage.tsx";
+import SignInPage from "./pages/auth/SignInPage.tsx";
+import home from "./assets/home.svg"
 
 
 
@@ -20,7 +21,8 @@ function App() {
         <BrowserRouter>
             <div className="App">
                 <header className="header">
-                    <Link to="/" className="logo">Главная</Link>
+                    <img src={home} alt="home"/>
+                    <Link to="/" className="goHome">Главная</Link>
                 </header>
 
                 <Routes>

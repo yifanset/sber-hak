@@ -8,17 +8,17 @@ const ContractPage = () => {
         <div className={classes.page}>
             <div className={classes.content}>
                 <h1 className={classes.title}>Зарплатный договор</h1>
-                <p className={classes.subtitle}>Выберите тип договора</p>
+                <p className={classes.subtitle}>Оформить как:</p>
 
                 <div className={classes.buttons}>
                     <button
-                        className={classes.buttonLegal}
+                        className={classes.button}
                         onClick={() => navigate('/demo/contract/legal')}
                     >
                         Юридическое лицо
                     </button>
                     <button
-                        className={classes.buttonIndividual}
+                        className={classes.button}
                         onClick={() => navigate('/demo/contract/individual')}
                     >
                         Физическое лицо

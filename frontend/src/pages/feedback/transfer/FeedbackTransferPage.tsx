@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import classes from './FeedbackTransferPage.module.css';
+import classes from '../Survay.module.css';
 
 interface Question {
     id: number;

@@ -49,8 +49,8 @@ const BonusPage = () => {
                 {/* Карточка престижности */}
                 <div className={classes.prestigeCard}>
                     <div className={classes.prestigeHeader}>
-                        <p className={classes.prestigeLabel}>Престижность клиента</p>
-                        <p className={classes.prestigeLevel}>Уровень {prestigeLevel}/3</p>
+                        <p className={classes.prestigeLabel}>Уровень клиента</p>
+                        <p className={classes.prestigeLevel}>{prestigeLevel}/3</p>
                     </div>
                     <div className={classes.progressBar}>
                         <div
@@ -80,11 +80,8 @@ const BonusPage = () => {
                                     <div className={classes.categoryInfo}>
                                         <h3 className={classes.categoryName}>
                                             {category.name}
-                                            {isExtra && <span className={classes.extraBadge}>Premium</span>}
+                                            {isExtra && <span className={classes.extraBadge}>Дополнительно</span>}
                                         </h3>
-                                        <p className={classes.categoryDesc}>
-                                            {isExtra ? 'Кешбэк до 15%' : 'Кешбэк до 10%'}
-                                        </p>
                                     </div>
                                     <button className={`${classes.spendButton} ${isExtra ? classes.spendButtonExtra : ''}`}>
                                         Потратить

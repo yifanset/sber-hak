@@ -1,7 +1,6 @@
 .page {
     min-height: 100vh;
     width: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     padding: 40px 20px;
     box-sizing: border-box;
     display: flex;
@@ -16,7 +15,6 @@
 
 .title {
     font-size: 2.5rem;
-    color: white;
     margin-bottom: 2rem;
     font-weight: 600;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -45,7 +43,6 @@
 }
 
 .progressText {
-    color: rgba(255, 255, 255, 0.9);
     font-size: 0.9rem;
     text-align: right;
 }
@@ -61,7 +58,6 @@
 }
 
 .question {
-    color: white;
     font-size: 1.5rem;
     margin-bottom: 30px;
     font-weight: 500;
@@ -80,7 +76,7 @@
     display: flex;
     align-items: center;
     padding: 15px 20px;
-    background: rgba(255, 255, 255, 0.1);
+    background: #F1F1F1;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -101,7 +97,6 @@
 }
 
 .optionText {
-    color: white;
     font-size: 1.1rem;
 }
 
@@ -116,18 +111,16 @@
     padding: 12px 24px;
     font-size: 1rem;
     font-weight: 500;
-    border: none;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--bg-button);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.3);
     flex: 1;
 }
 
 .navButton:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
 }
 
@@ -137,7 +130,7 @@
 }
 
 .nextButton {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: var(--bg-button);
     border: none;
 }
 
@@ -149,7 +142,7 @@
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    background: var(--bg-button);
     color: white;
     flex: 1;
 }
@@ -217,19 +210,16 @@
     align-items: center;
     justify-content: center;
     font-size: 3rem;
-    color: white;
     box-shadow: 0 8px 20px rgba(67, 233, 123, 0.4);
 }
 
 .successTitle {
-    color: white;
     font-size: 2rem;
     margin-bottom: 15px;
     font-weight: 600;
 }
 
 .successMessage {
-    color: rgba(255, 255, 255, 0.9);
     font-size: 1.2rem;
     margin-bottom: 30px;
 }
@@ -238,17 +228,14 @@
     padding: 14px 32px;
     font-size: 1.1rem;
     font-weight: 500;
-    border: none;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
+    background: var(--bg-button);
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .backButton:hover {
-    background: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
 }
 

@@ -1,7 +1,6 @@
 .page {
     min-height: 100vh;
     width: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,7 +11,7 @@
 .container {
     max-width: 450px;
     width: 100%;
-    background: rgba(255, 255, 255, 0.15);
+    background: #FFFFFF;
     backdrop-filter: blur(10px);
     border-radius: 20px;
     padding: 40px;
@@ -21,8 +20,7 @@
 }
 
 .title {
-    font-size: 2.5rem;
-    color: white;
+    font-size: 34px;
     margin-bottom: 30px;
     font-weight: 600;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -32,7 +30,7 @@
 .form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 28px;
 }
 
 .formGroup {
@@ -42,8 +40,8 @@
 }
 
 .label {
-    color: white;
     font-size: 1rem;
+    color: var(--text);
     font-weight: 500;
 }
 
@@ -52,24 +50,22 @@
     font-size: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background: #F1F1F1;
     outline: none;
     transition: all 0.3s ease;
+    color: var(--text);
 }
 
 .input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
 }
 
 .input:focus {
     border-color: rgba(255, 255, 255, 0.8);
-    background: rgba(255, 255, 255, 0.15);
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
 .submitButton {
-    margin-top: 10px;
     padding: 16px;
     font-size: 1.1rem;
     font-weight: 600;
@@ -77,7 +73,7 @@
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    background: var(--bg-button);
     color: white;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
@@ -94,19 +90,18 @@
 .linkText {
     margin-top: 25px;
     text-align: center;
-    color: white;
     font-size: 1rem;
 }
 
 .link {
-    color: #43e97b;
+    color: var(--bg-button);
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
 .link:hover {
-    color: #38f9d7;
+    color: #43e97b;
     text-decoration: underline;
 }
 
@@ -127,4 +122,26 @@
         padding: 14px;
         font-size: 1rem;
     }
+}
+
+.select {
+    padding: 14px 16px;
+    font-size: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    background: #F1F1F1;
+    color: var(--text-secondary);
+
+    outline: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.select option {
+    background: #667eea;
+    color: white;
+}
+
+.select:focus {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }

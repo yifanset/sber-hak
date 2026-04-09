@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import classes from './SignUpPage.module.css';
+import classes from './AuthPage.module.css';
 
 const SignUpPage = () => {
     const navigate = useNavigate();
@@ -10,25 +10,57 @@ const SignUpPage = () => {
         password: '',
         city: ''
     });
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const cities = ['Новосибирск', 'Красноярск', 'Иркутск', 'Томск', 'Кемерово'];
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Здесь будет логика регистрации
-        console.log('Регистрация:', formData);
-        navigate('/signin');
+        setIsLoading(true);
+        setError('');
+
+        try {
+            const response = await fetch('http://localhost:3000/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Сохраняем токен в localStorage
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('userId', data.userId);
+                console.log('Регистрация успешна:', data);
+                navigate('/demo');
+            } else {
+                setError(data.message || 'Ошибка при регистрации');
+            }
+        } catch (err) {
+            setError('Не удалось подключиться к серверу');
+            console.error('Ошибка:', err);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
         <div className={classes.page}>
             <div className={classes.container}>
                 <h1 className={classes.title}>Регистрация</h1>
+
+                {error && <div className={classes.error}>{error}</div>}
 
                 <form className={classes.form} onSubmit={handleSubmit}>
                     <div className={classes.formGroup}>
@@ -75,20 +107,29 @@ const SignUpPage = () => {
 
                     <div className={classes.formGroup}>
                         <label htmlFor="city" className={classes.label}>Город</label>
-                        <input
-                            type="text"
+                        <select
                             id="city"
                             name="city"
                             value={formData.city}
                             onChange={handleChange}
-                            className={classes.input}
-                            placeholder="Введите ваш город"
+                            className={classes.select}
                             required
-                        />
+                        >
+                            <option value="">Выберите город</option>
+                            {cities.map((city) => (
+                                <option key={city} value={city}>
+                                    {city}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
-                    <button type="submit" className={classes.submitButton}>
-                        Зарегистрироваться
+                    <button
+                        type="submit"
+                        className={classes.submitButton}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Регистрация...' : 'Зарегистрироваться'}
                     </button>
                 </form>
 

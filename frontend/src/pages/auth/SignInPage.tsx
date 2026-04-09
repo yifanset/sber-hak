@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import classes from './SignInPage.module.css';
+import classes from './AuthPage.module.css';
 
 const SignInPage = () => {
     const navigate = useNavigate();
@@ -8,6 +8,8 @@ const SignInPage = () => {
         login: '',
         password: ''
     });
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -16,17 +18,44 @@ const SignInPage = () => {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Здесь будет логика входа
-        console.log('Вход:', formData);
-        navigate('/demo');
+        setIsLoading(true);
+        setError('');
+
+        try {
+            const response = await fetch('http://localhost:3000/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('userId', data.userId);
+                console.log('Вход выполнен:', data);
+                navigate('/demo');
+            } else {
+                setError(data.message || 'Ошибка при входе');
+            }
+        } catch (err) {
+            setError('Не удалось подключиться к серверу');
+            console.error('Ошибка:', err);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
         <div className={classes.page}>
             <div className={classes.container}>
                 <h1 className={classes.title}>Вход</h1>
+
+                {error && <div className={classes.error}>{error}</div>}
 
                 <form className={classes.form} onSubmit={handleSubmit}>
                     <div className={classes.formGroup}>
@@ -57,8 +86,12 @@ const SignInPage = () => {
                         />
                     </div>
 
-                    <button type="submit" className={classes.submitButton}>
-                        Войти
+                    <button
+                        type="submit"
+                        className={classes.submitButton}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Вход...' : 'Войти'}
                     </button>
                 </form>
 

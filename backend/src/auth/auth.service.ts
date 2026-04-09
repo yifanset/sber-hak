@@ -1,9 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../entities/user/users.service';
 import { LoginDto } from './dto/login.dto';
-import {User} from "../entities/user/user.model";
-import {RegisterDto} from "../entities/user/dto/create-user.dto";
+import { User } from "../entities/user/user.model";
+import { RegisterDto } from "../entities/user/dto/create-user.dto";
 
 @Injectable()
 export class AuthService {
@@ -30,6 +30,7 @@ export class AuthService {
             success: true,
             message: 'Регистрация успешна',
             token,
+            userId: user.userId,
         };
     }
 
@@ -61,6 +62,7 @@ export class AuthService {
             success: true,
             message: 'Авторизация успешна',
             token,
+            userId: user.userId,
         };
     }
 

@@ -1,5 +1,5 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
+import {Controller, Post, Body, UseGuards, Param, Get} from '@nestjs/common';
+import {ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth, ApiParam} from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UpdateMoneyDto } from './dto/update-money.dto';
 import { UpdateBonusDto } from './dto/update-bonus.dto';
@@ -14,6 +14,53 @@ import {JwtAuthGuard} from "../../auth/jwt-auth.guard";
 @Controller('users')
 export class UsersController {
     constructor(private usersService: UsersService) {}
+
+    @Get(':userId')
+    @ApiOperation({ summary: 'Получить полную информацию о пользователе по ID' })
+    @ApiParam({ name: 'userId', description: 'ID пользователя', example: 1 })
+    @ApiResponse({
+        status: 200,
+        description: 'Информация о пользователе',
+        schema: {
+            example: {
+                success: true,
+                user: {
+                    userId: 1,
+                    login: 'user123',
+                    name: 'Иван Иванов',
+                    city: 'Москва',
+                    money: 1000.50,
+                    bonus: 500,
+                    level: 2,
+                    contract: true,
+                    createdAt: '2024-01-01T00:00:00.000Z',
+                    updatedAt: '2024-01-01T00:00:00.000Z',
+                    feedbacks: [
+                        {
+                            id: 1,
+                            question1: 5,
+                            question2: 4,
+                            question3: 5,
+                            createdAt: '2024-01-01T00:00:00.000Z'
+                        }
+                    ],
+                    stats: [
+                        {
+                            id: 1,
+                            question1: 5,
+                            question2: 4,
+                            question3: 5,
+                            createdAt: '2024-01-01T00:00:00.000Z'
+                        }
+                    ]
+                }
+            }
+        }
+    })
+    @ApiResponse({ status: 404, description: 'Пользователь не найден' })
+    async getUserInfo(@Param('userId') userId: string) {
+        return this.usersService.getUserInfo(Number(userId));
+    }
 
     @UseGuards(JwtAuthGuard)
     @Post('money')
@@ -32,6 +79,26 @@ export class UsersController {
     })
     @ApiResponse({ status: 401, description: 'Не авторизован' })
     @ApiResponse({ status: 404, description: 'Пользователь не найден' })
+
+
+    @UseGuards(JwtAuthGuard)
+    @Post('money')
+    @ApiOperation({ summary: 'Установить точную сумму денег' })
+    @ApiBody({ type: UpdateMoneyDto })
+    @ApiResponse({
+        status: 200,
+        description: 'Баланс успешно обновлен',
+        schema: {
+            example: {
+                success: true,
+                message: 'Баланс успешно обновлен',
+                money: 1000.50
+            }
+        }
+    })
+    @ApiResponse({ status: 401, description: 'Не авторизован' })
+    @ApiResponse({ status: 404, description: 'Пользователь не найден' })
+
     async updateMoney(@Body() updateMoneyDto: UpdateMoneyDto) {
         return this.usersService.updateMoney(updateMoneyDto.userId, updateMoneyDto.money);
     }

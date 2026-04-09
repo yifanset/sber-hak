@@ -4,7 +4,6 @@
     align-items: center;
     min-height: 100vh;
     width: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     padding: 20px;
     box-sizing: border-box;
 }
@@ -17,7 +16,6 @@
 
 .title {
     font-size: 2.5rem;
-    color: white;
     margin-bottom: 1rem;
     font-weight: 600;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -25,8 +23,7 @@
 
 .subtitle {
     font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 3rem;
+    margin-bottom: 20px;
 }
 
 .buttons {
@@ -36,7 +33,7 @@
     align-items: center;
 }
 
-.buttonLegal {
+.button {
     width: 100%;
     max-width: 320px;
     padding: 16px 32px;
@@ -47,37 +44,16 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: var(--bg-button);
     color: white;
 }
 
-.buttonLegal:hover {
+.button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
 }
 
-.buttonIndividual {
-    width: 100%;
-    max-width: 320px;
-    padding: 16px 32px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    color: white;
-}
-
-.buttonIndividual:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(67, 233, 123, 0.4);
-}
-
-.buttonLegal:active,
-.buttonIndividual:active {
+.button:active{
     transform: translateY(0);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }

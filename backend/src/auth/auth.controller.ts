@@ -1,8 +1,8 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
+import { RegisterDto } from '../entities/user/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
-import {RegisterDto} from "../entities/user/dto/create-user.dto";
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -19,7 +19,8 @@ export class AuthController {
             example: {
                 success: true,
                 message: 'Регистрация успешна',
-                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                userId: 1
             }
         }
     })
@@ -38,7 +39,8 @@ export class AuthController {
             example: {
                 success: true,
                 message: 'Авторизация успешна',
-                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                userId: 1
             }
         }
     })
