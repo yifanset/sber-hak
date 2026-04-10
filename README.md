@@ -3,7 +3,7 @@
 ## Описание
 
 ### Frontend: React + TS;
-### Backend: NestJS + TS;
+### Backend: NestJS + TS + PostgreSQL;
 ### Сервисы: Python + FastAPI;
 
 
