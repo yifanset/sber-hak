@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import classes from '../Survay.module.css';
 
 interface Question {
@@ -10,35 +11,28 @@ interface Question {
 const questions: Question[] = [
     {
         id: 1,
-        question: 'Насколько вы удовлетворены текущими идеями команды?',
-        options: ['Очень доволен', 'Скорее доволен', 'Нейтрально', 'Скорее недоволен', 'Совершенно недоволен']
+        question: 'Насколько вам интересна новая фича программы лояльности (например, повышенный кэшбэк за регулярные операции)?',
+        options: ['Очень интересно, сразу бы использовал', 'Скорее интересно', 'Нейтрально, посмотрю', 'Скорее неинтересно', 'Совсем неинтересно']
     },
     {
         id: 2,
-        question: 'Как часто вы предлагаете идеи по улучшению продукта?',
-        options: ['Регулярно', 'Иногда', 'Редко', 'Никогда', 'Хотел бы, но не знаю как']
+        question: 'Как часто вы бы пользовались этой новой возможностью в программе лояльности?',
+        options: ['Ежедневно', 'Несколько раз в неделю', 'Раз в месяц', 'Очень редко', 'Никогда']
     },
     {
         id: 3,
-        question: 'Что мотивирует вас делиться идеями с командой?',
-        options: ['Признание коллег', 'Бонусы и премии', 'Желание улучшить продукт', 'Возможность роста', 'Не мотивирует ничего']
+        question: 'Что для вас самое важное при внедрении такой фичи в банке?',
+        options: ['Прозрачные условия начисления', 'Моментальное зачисление бонусов', 'Высокий процент кэшбэка', 'Простота активации', 'Долгий срок действия бонусов']
     },
-    {
-        id: 4,
-        question: 'Насколько легко внедрять новые идеи в текущие процессы?',
-        options: ['Очень легко', 'Достаточно легко', 'Есть сложности', 'Очень сложно', 'Практически невозможно']
-    },
-    {
-        id: 5,
-        question: 'Хотели бы вы участвовать в специальных сессиях по генерации идей?',
-        options: ['Определенно да', 'Скорее да', 'Не уверен', 'Скорее нет', 'Точно нет']
-    }
 ];
 
 const FeedbackIdeaPage = () => {
+    const navigate = useNavigate();
     const [answers, setAnswers] = useState<Record<number, string>>({});
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const handleAnswerSelect = (questionId: number, answer: string) => {
         setAnswers(prev => ({
@@ -59,9 +53,58 @@ const FeedbackIdeaPage = () => {
         }
     };
 
-    const handleSubmit = () => {
-        setIsSubmitted(true);
-        console.log('Ответы по идее команды:', answers);
+    const getAnswerValue = (questionId: number, answer: string): number => {
+        const question = questions.find(q => q.id === questionId);
+        if (!question) return 0;
+
+        const optionIndex = question.options.indexOf(answer);
+        return optionIndex + 1; // Возвращаем значение от 1 до 5
+    };
+
+    const handleSubmit = async () => {
+        setIsLoading(true);
+        setError('');
+
+        try {
+            const userId = localStorage.getItem('userId');
+            const token = localStorage.getItem('token');
+
+            if (!userId || !token) {
+                setError('Пользователь не авторизован');
+                setIsLoading(false);
+                return;
+            }
+
+            const statsData = {
+                userId: parseInt(userId),
+                question1: getAnswerValue(1, answers[1]),
+                question2: getAnswerValue(2, answers[2]),
+                question3: getAnswerValue(3, answers[3])
+            };
+
+            const response = await fetch('http://localhost:3000/api/stats', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(statsData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                setIsSubmitted(true);
+                console.log('Статистика успешно отправлена:', data);
+            } else {
+                setError(data.message || 'Ошибка при отправке данных');
+            }
+        } catch (err) {
+            setError('Не удалось подключиться к серверу');
+            console.error('Ошибка:', err);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const currentQuestion = questions[currentQuestionIndex];
@@ -81,9 +124,9 @@ const FeedbackIdeaPage = () => {
                         </p>
                         <button
                             className={classes.backButton}
-                            onClick={() => window.history.back()}
+                            onClick={() => navigate('/')}
                         >
-                            Вернуться назад
+                            Вернуться на главную
                         </button>
                     </div>
                 </div>
@@ -95,6 +138,8 @@ const FeedbackIdeaPage = () => {
         <div className={classes.page}>
             <div className={classes.content}>
                 <h1 className={classes.title}>Обратная связь по идее команды</h1>
+
+                {error && <div className={classes.error}>{error}</div>}
 
                 {/* Прогресс бар */}
                 <div className={classes.progressContainer}>
@@ -135,6 +180,7 @@ const FeedbackIdeaPage = () => {
                             <button
                                 className={classes.navButton}
                                 onClick={handlePrevious}
+                                disabled={isLoading}
                             >
                                 ← Назад
                             </button>
@@ -144,7 +190,7 @@ const FeedbackIdeaPage = () => {
                             <button
                                 className={`${classes.navButton} ${classes.nextButton}`}
                                 onClick={handleNext}
-                                disabled={!isCurrentQuestionAnswered}
+                                disabled={!isCurrentQuestionAnswered || isLoading}
                             >
                                 Далее →
                             </button>
@@ -152,9 +198,9 @@ const FeedbackIdeaPage = () => {
                             <button
                                 className={`${classes.submitButton}`}
                                 onClick={handleSubmit}
-                                disabled={!allQuestionsAnswered}
+                                disabled={!allQuestionsAnswered || isLoading}
                             >
-                                Отправить
+                                {isLoading ? 'Отправка...' : 'Отправить'}
                             </button>
                         )}
                     </div>
@@ -168,7 +214,7 @@ const FeedbackIdeaPage = () => {
                             className={`${classes.indicatorDot} ${
                                 answers[q.id] ? classes.answered : ''
                             } ${index === currentQuestionIndex ? classes.active : ''}`}
-                            onClick={() => setCurrentQuestionIndex(index)}
+                            onClick={() => !isLoading && setCurrentQuestionIndex(index)}
                         />
                     ))}
                 </div>

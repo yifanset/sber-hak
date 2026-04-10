@@ -1,9 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import classes from './BonusPage.module.css';
 
+interface UserData {
+    money: string;
+    level: number;
+    name?: string;
+    bonus?: string;
+    contract?: boolean;
+}
+
 const BonusPage = () => {
-    const [bonuses] = useState(300);
-    const [prestigeLevel] = useState(3); // Уровень от 1 до 3
+    const navigate = useNavigate();
+    const [userData, setUserData] = useState<UserData | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState('');
 
     const baseCategories = [
         { id: 1, name: 'Кафе', icon: '☕', color: '#ff6b6b' },
@@ -17,16 +28,84 @@ const BonusPage = () => {
         { id: 6, name: 'SPA', icon: '💆', color: '#54a0ff' }
     ];
 
-    // Получаем дополнительные категории в зависимости от уровня
-    const getExtraCategories = () => {
-        return extraCategories.slice(0, prestigeLevel);
-    };
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const userId = localStorage.getItem('userId');
+                const token = localStorage.getItem('token');
 
-    const allCategories = [...baseCategories, ...getExtraCategories()];
+                if (!userId || !token) {
+                    setError('Пользователь не авторизован');
+                    setIsLoading(false);
+                    return;
+                }
+
+                const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка при получении данных');
+                }
+
+                const data = await response.json();
+                setUserData(data.user);
+            } catch (err) {
+                setError('Не удалось загрузить данные пользователя');
+                console.error('Ошибка:', err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     const getProgressWidth = (level: number) => {
         return (level / 3) * 100;
     };
+
+    const getExtraCategories = () => {
+        const level = userData?.level || 0;
+        return extraCategories.slice(0, level);
+    };
+
+    const handleSpendBonus = async () => {
+        try {
+           console.log('Бонусы потрачены')
+        } catch (err) {
+            console.error('Ошибка при трате бонусов:', err);
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <div className={classes.page}>
+                <div className={classes.loading}>Загрузка...</div>
+            </div>
+        );
+    }
+
+    if (error || !userData) {
+        return (
+            <div className={classes.page}>
+                <div className={classes.error}>
+                    <p>{error || 'Данные не найдены'}</p>
+                    <button onClick={() => navigate('/demo')} className={classes.errorButton}>
+                        Вернуться на главную
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    const bonuses = parseFloat(userData.bonus || '0') || 0;
+    const level = userData.level || 0;
+    const allCategories = [...baseCategories, ...getExtraCategories()];
 
     return (
         <div className={classes.page}>
@@ -47,18 +126,20 @@ const BonusPage = () => {
                 </div>
 
                 {/* Карточка престижности */}
-                <div className={classes.prestigeCard}>
-                    <div className={classes.prestigeHeader}>
-                        <p className={classes.prestigeLabel}>Уровень клиента</p>
-                        <p className={classes.prestigeLevel}>{prestigeLevel}/3</p>
+                {level > 0 && (
+                    <div className={classes.prestigeCard}>
+                        <div className={classes.prestigeHeader}>
+                            <p className={classes.prestigeLabel}>Уровень клиента</p>
+                            <p className={classes.prestigeLevel}>{level}/3</p>
+                        </div>
+                        <div className={classes.progressBar}>
+                            <div
+                                className={classes.progressFill}
+                                style={{ width: `${getProgressWidth(level)}%` }}
+                            />
+                        </div>
                     </div>
-                    <div className={classes.progressBar}>
-                        <div
-                            className={classes.progressFill}
-                            style={{ width: `${getProgressWidth(prestigeLevel)}%` }}
-                        />
-                    </div>
-                </div>
+                )}
 
                 {/* Список куда потратить */}
                 <div className={classes.spendSection}>
@@ -80,10 +161,16 @@ const BonusPage = () => {
                                     <div className={classes.categoryInfo}>
                                         <h3 className={classes.categoryName}>
                                             {category.name}
-                                            {isExtra && <span className={classes.extraBadge}>Дополнительно</span>}
+                                            {isExtra && <span className={classes.extraBadge}>Premium</span>}
                                         </h3>
+                                        <p className={classes.categoryDesc}>
+                                            {isExtra ? 'Кешбэк до 15%' : 'Кешбэк до 10%'}
+                                        </p>
                                     </div>
-                                    <button className={`${classes.spendButton} ${isExtra ? classes.spendButtonExtra : ''}`}>
+                                    <button
+                                        className={`${classes.spendButton} ${isExtra ? classes.spendButtonExtra : ''}`}
+                                        onClick={() => handleSpendBonus()}
+                                    >
                                         Потратить
                                     </button>
                                 </div>

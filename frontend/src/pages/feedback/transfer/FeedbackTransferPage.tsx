@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import classes from '../Survay.module.css';
 
 interface Question {
@@ -10,35 +11,28 @@ interface Question {
 const questions: Question[] = [
     {
         id: 1,
-        question: 'Рассматриваете ли вы перевод зарплаты в другой банк?',
-        options: ['Да, активно рассматриваю', 'Думаю об этом', 'Нет, не рассматриваю', 'Затрудняюсь ответить']
+        question: 'Какая причина стала для вас основной при принятии решения о смене банка для зарплатного проекта?',
+        options: ['Не устраивает мобильное приложение', 'Высокая стоимость обслуживания', 'Низкое качество обслуживания в отделениях и службе поддержки', 'Более выгодные условия в другом банке', 'Технические проблемы с зачислением зарплаты']
     },
     {
         id: 2,
-        question: 'Что для вас наиболее важно при выборе зарплатного банка?',
-        options: ['Низкие проценты по кредитам', 'Высокий кешбэк', 'Удобное мобильное приложение', 'Надежность банка', 'Близость отделений']
+        question: 'Насколько для вас важны были тарифы и комиссии при смене зарплатного банка?',
+        options: ['Очень важно', 'Важно, но не главное', 'Средне', 'Мало важно', 'Совсем не важно']
     },
     {
         id: 3,
-        question: 'Какие условия могли бы побудить вас сменить зарплатный банк?',
-        options: ['Повышенный кешбэк', 'Бесплатное обслуживание', 'Выгодные условия по ипотеке', 'Бонусы за перевод зарплаты', 'Улучшенный сервис']
-    },
-    {
-        id: 4,
-        question: 'Как часто вы пользуетесь мобильным приложением банка?',
-        options: ['Ежедневно', 'Несколько раз в неделю', 'Раз в неделю', 'Редко', 'Не пользуюсь']
-    },
-    {
-        id: 5,
-        question: 'Готовы ли вы порекомендовать наш банк коллегам?',
-        options: ['Определенно да', 'Скорее да', 'Затрудняюсь ответить', 'Скорее нет', 'Определенно нет']
+        question: 'Какие бонусные программы или дополнительные услуги повлияли на ваш выбор нового банка?',
+        options: ['Кешбэк рублями за любые покупки', 'Процент на остаток по зарплатной карте', 'Бесплатное обслуживание и снятие наличных в любых банкоматах', 'Выгодные условия по кредитам', 'Никакие бонусы не повлияли']
     }
 ];
 
 const FeedbackTransferPage = () => {
+    const navigate = useNavigate();
     const [answers, setAnswers] = useState<Record<number, string>>({});
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const handleAnswerSelect = (questionId: number, answer: string) => {
         setAnswers(prev => ({
@@ -59,9 +53,58 @@ const FeedbackTransferPage = () => {
         }
     };
 
-    const handleSubmit = () => {
-        setIsSubmitted(true);
-        console.log('Ответы опроса:', answers);
+    const getAnswerValue = (questionId: number, answer: string): number => {
+        const question = questions.find(q => q.id === questionId);
+        if (!question) return 0;
+
+        const optionIndex = question.options.indexOf(answer);
+        return optionIndex + 1; // Возвращаем значение от 1 до 5
+    };
+
+    const handleSubmit = async () => {
+        setIsLoading(true);
+        setError('');
+
+        try {
+            const userId = localStorage.getItem('userId');
+            const token = localStorage.getItem('token');
+
+            if (!userId || !token) {
+                setError('Пользователь не авторизован');
+                setIsLoading(false);
+                return;
+            }
+
+            const feedbackData = {
+                userId: parseInt(userId),
+                question1: getAnswerValue(1, answers[1]),
+                question2: getAnswerValue(2, answers[2]),
+                question3: getAnswerValue(3, answers[3])
+            };
+
+            const response = await fetch('http://localhost:3000/api/feedback', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(feedbackData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                setIsSubmitted(true);
+                console.log('Опрос успешно отправлен:', data);
+            } else {
+                setError(data.message || 'Ошибка при отправке опроса');
+            }
+        } catch (err) {
+            setError('Не удалось подключиться к серверу');
+            console.error('Ошибка:', err);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const currentQuestion = questions[currentQuestionIndex];
@@ -81,9 +124,9 @@ const FeedbackTransferPage = () => {
                         </p>
                         <button
                             className={classes.backButton}
-                            onClick={() => window.history.back()}
+                            onClick={() => navigate('/')}
                         >
-                            Вернуться назад
+                            Вернуться на главную
                         </button>
                     </div>
                 </div>
@@ -95,6 +138,8 @@ const FeedbackTransferPage = () => {
         <div className={classes.page}>
             <div className={classes.content}>
                 <h1 className={classes.title}>Опрос о переводе зарплаты</h1>
+
+                {error && <div className={classes.error}>{error}</div>}
 
                 {/* Прогресс бар */}
                 <div className={classes.progressContainer}>
@@ -135,6 +180,7 @@ const FeedbackTransferPage = () => {
                             <button
                                 className={classes.navButton}
                                 onClick={handlePrevious}
+                                disabled={isLoading}
                             >
                                 ← Назад
                             </button>
@@ -144,7 +190,7 @@ const FeedbackTransferPage = () => {
                             <button
                                 className={`${classes.navButton} ${classes.nextButton}`}
                                 onClick={handleNext}
-                                disabled={!isCurrentQuestionAnswered}
+                                disabled={!isCurrentQuestionAnswered || isLoading}
                             >
                                 Далее →
                             </button>
@@ -152,9 +198,9 @@ const FeedbackTransferPage = () => {
                             <button
                                 className={`${classes.submitButton}`}
                                 onClick={handleSubmit}
-                                disabled={!allQuestionsAnswered}
+                                disabled={!allQuestionsAnswered || isLoading}
                             >
-                                Отправить
+                                {isLoading ? 'Отправка...' : 'Отправить'}
                             </button>
                         )}
                     </div>
@@ -168,7 +214,7 @@ const FeedbackTransferPage = () => {
                             className={`${classes.indicatorDot} ${
                                 answers[q.id] ? classes.answered : ''
                             } ${index === currentQuestionIndex ? classes.active : ''}`}
-                            onClick={() => setCurrentQuestionIndex(index)}
+                            onClick={() => !isLoading && setCurrentQuestionIndex(index)}
                         />
                     ))}
                 </div>
