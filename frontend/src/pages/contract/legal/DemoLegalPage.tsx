@@ -65,7 +65,7 @@ const DemoLegalPage = () => {
                     </div>
 
                     <div className={classes.section}>
-                        <h2 className={classes.sectionTitle}>Интеграция с 1С бесплатно</h2>
+                        <h2 className={classes.sectionTitle}>Интеграция с CRM</h2>
                         <p className={classes.sectionText}>
                             Запустив ведомости и налоговые отчеты будут формироваться автоматически.
                         </p>
@@ -73,9 +73,9 @@ const DemoLegalPage = () => {
                 </div>
 
                 <div className={classes.sectionRules}>
-                    <h2 className={classes.sectionTitle}>Зарплата без комиссии</h2>
+                    <h2 className={classes.sectionTitle}>Выгодные условия</h2>
                     <p className={classes.sectionText}>
-                        Автоматически перечисляйте выплаты сотрудникам <br/>любых объёмов без банковских сборов
+                        Автоматически перечисляйте выплаты сотрудникам <br/>любых объёмов с заниженной комиссией
                     </p>
                 </div>
 

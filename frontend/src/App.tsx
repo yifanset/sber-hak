@@ -12,9 +12,8 @@ import FeedbackTransferPage from "./pages/feedback/transfer/FeedbackTransferPage
 import FeedbackIdeaPage from "./pages/feedback/idea/FeedbackIdeaPage.tsx";
 import SignUpPage from "./pages/auth/SignUpPage.tsx";
 import SignInPage from "./pages/auth/SignInPage.tsx";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import home from "./assets/home.svg"
-
-
 
 function App() {
     return (
@@ -26,18 +25,57 @@ function App() {
                 </header>
 
                 <Routes>
+                    {/* Публичные маршруты */}
                     <Route path="/" element={<MainPage />} />
                     <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/signin" element={<SignInPage />} />
-                    <Route path="/feedback" element={<FeedbackPage />} />
-                    <Route path="/feedback/transfer" element={<FeedbackTransferPage />} />
-                    <Route path="/feedback/idea" element={<FeedbackIdeaPage />} />
-                    <Route path="/stats" element={<StatsPage />} />
-                    <Route path="/demo" element={<DemoPage />} />
-                    <Route path="/demo/contract" element={<ContractPage />} />
-                    <Route path="/demo/bonus" element={<BonusPage />} />
-                    <Route path="/demo/contract/individual" element={<DemoIndividualPage />} />
-                    <Route path="/demo/contract/legal" element={<DemoLegalPage />} />
+
+                    {/* Защищенные маршруты */}
+                    <Route path="/feedback" element={
+                        <ProtectedRoute>
+                            <FeedbackPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/feedback/transfer" element={
+                        <ProtectedRoute>
+                            <FeedbackTransferPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/feedback/idea" element={
+                        <ProtectedRoute>
+                            <FeedbackIdeaPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/stats" element={
+                        <ProtectedRoute>
+                            <StatsPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/demo" element={
+                        <ProtectedRoute>
+                            <DemoPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/demo/contract" element={
+                        <ProtectedRoute>
+                            <ContractPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/demo/bonus" element={
+                        <ProtectedRoute>
+                            <BonusPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/demo/contract/individual" element={
+                        <ProtectedRoute>
+                            <DemoIndividualPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/demo/contract/legal" element={
+                        <ProtectedRoute>
+                            <DemoLegalPage />
+                        </ProtectedRoute>
+                    } />
                 </Routes>
             </div>
         </BrowserRouter>

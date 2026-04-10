@@ -21,13 +21,6 @@ const MainPage = () => {
                     >
                         Оставить обратную связь
                     </button>
-
-                    <button
-                        className={classes.button}
-                        onClick={() => navigate('/stats')}
-                    >
-                        Статистика
-                    </button>
                 </div>
             </div>
         </div>

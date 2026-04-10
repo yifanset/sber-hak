@@ -17,15 +17,15 @@ const BonusPage = () => {
     const [error, setError] = useState('');
 
     const baseCategories = [
-        { id: 1, name: 'Кафе', icon: '☕', color: '#ff6b6b' },
-        { id: 2, name: 'Боулинг', icon: '🎳', color: '#4ecdc4' },
-        { id: 3, name: 'Кино', icon: '🎬', color: '#a8e6cf' }
+        { id: 1, name: 'Мегамаркет', icon: '🛍️', color: '#ff6b6b' },
+        { id: 2, name: 'Самокат', icon: '🛴', color: '#4ecdc4' },
+        { id: 3, name: 'Okko', icon: '🎬', color: '#a8e6cf' }
     ];
 
     const extraCategories = [
-        { id: 4, name: 'Рестораны', icon: '🍽️', color: '#feca57' },
-        { id: 5, name: 'Путешествия', icon: '✈️', color: '#ff9ff3' },
-        { id: 6, name: 'SPA', icon: '💆', color: '#54a0ff' }
+        { id: 4, name: 'Ярче!', icon: '🛒', color: '#feca57' },
+        { id: 5, name: 'Novex', icon: '🛒', color: '#ff9ff3' },
+        { id: 6, name: 'КДВ Групп', icon: '🛒', color: '#54a0ff' }
     ];
 
     useEffect(() => {

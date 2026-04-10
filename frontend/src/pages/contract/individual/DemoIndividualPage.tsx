@@ -1,13 +1,59 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import classes from '../Benefit.module.css';
 
 const DemoIndividualPage = () => {
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const handleSignContract = async () => {
+        setIsLoading(true);
+        setError('');
+
+        try {
+            const userId = localStorage.getItem('userId');
+            const token = localStorage.getItem('token');
+
+            if (!userId || !token) {
+                setError('Пользователь не авторизован');
+                setIsLoading(false);
+                return;
+            }
+
+            const response = await fetch('http://localhost:3000/api/users/contract/sign', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: parseInt(userId)
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                console.log('Договор успешно подписан:', data);
+                navigate('/demo');
+            } else {
+                setError(data.message || 'Ошибка при подписании договора');
+            }
+        } catch (err) {
+            setError('Не удалось подключиться к серверу');
+            console.error('Ошибка:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div className={classes.page}>
             <div className={classes.container}>
                 <h1 className={classes.title}>Договор для физических лиц</h1>
+
+                {error && <div className={classes.error}>{error}</div>}
 
                 <div className={classes.sections}>
                     <div className={classes.section}>
@@ -20,8 +66,7 @@ const DemoIndividualPage = () => {
                         <p className={classes.sectionText}>
                             Чем выше баланс, тем больше <br/> точек для траты баллов
                         </p>
-                </div>
-
+                    </div>
                 </div>
 
                 <div className={classes.sectionRules}>
@@ -60,13 +105,12 @@ const DemoIndividualPage = () => {
                     </div>
                 </div>
 
-
-
                 <button
                     className={classes.submitButton}
-                    onClick={() => navigate('/demo')}
+                    onClick={handleSignContract}
+                    disabled={isLoading}
                 >
-                    Оформить договор
+                    {isLoading ? 'Оформление...' : 'Оформить договор'}
                 </button>
             </div>
         </div>
